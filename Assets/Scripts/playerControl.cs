@@ -7,7 +7,8 @@ public class playerControl : MonoBehaviour {
 	public bool killed = false;
 
     //forces for moving
-    float moveForce = 100f;
+    float moveForceX = 20f;
+    float moveForceY = 5f;
     float maxSpeed = 100f;
 
     // Use this for initialization
@@ -22,10 +23,7 @@ public class playerControl : MonoBehaviour {
 
 		// Horizontal flying
 		if (h * GetComponent<Rigidbody2D> ().velocity.x < maxSpeed){
-			if (GetComponent<Rigidbody2D> ().velocity.y == 0)
-				GetComponent<Rigidbody2D> ().AddForce (Vector2.right * h * moveForce);
-			else
-				GetComponent<Rigidbody2D> ().velocity = new Vector2 (0, GetComponent<Rigidbody2D> ().velocity.y);
+				GetComponent<Rigidbody2D> ().AddForce (Vector2.right * h * moveForceX);
 		}
 
         if (Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) >= maxSpeed)
@@ -34,10 +32,7 @@ public class playerControl : MonoBehaviour {
 
         // Vertical flying
 		if (w * GetComponent<Rigidbody2D> ().velocity.y < maxSpeed){
-			if (GetComponent<Rigidbody2D> ().velocity.x == 0)
-				GetComponent<Rigidbody2D> ().AddForce (Vector2.up * w * moveForce);
-			else
-				GetComponent<Rigidbody2D> ().velocity = new Vector2 (GetComponent<Rigidbody2D> ().velocity.x, 0);
+				GetComponent<Rigidbody2D> ().AddForce (Vector2.up * w * moveForceY);
 		}
 
 		// Don't go off the screen
