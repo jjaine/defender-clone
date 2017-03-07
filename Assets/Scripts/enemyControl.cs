@@ -11,6 +11,7 @@ public class enemyControl : MonoBehaviour {
 	public GameObject reloadTextObject;
 
 	GameObject stolenHuman;
+	GameObject[] humanArray;
 
 	public static bool playerExists = true;
 
@@ -62,15 +63,24 @@ public class enemyControl : MonoBehaviour {
 		Physics2D.IgnoreLayerCollision (8, 8, true);
 
 		if(playerExists){
+			humanArray = GameObject.FindGameObjectsWithTag("Human");
+			foreach(GameObject h in humanArray){
+				if(h.transform.position.y > 2f)
+					Destroy(h);
+			}
 			if(steal){
 				if(transform.position.y < 2.5f){
 					GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0.1f);
 				}
-				else{
+				else{				
 					steal = false;
 				}
 			}
 			else{
+				Debug.Log(humanArray.Length);
+				if(humanArray.Length < 1)
+					playerExists = false;
+
 				float dist = Vector3.Distance(player.transform.position, transform.position);
 				//move towards player if somewhat close, but do not move to touching
 				if(dist < 4){
