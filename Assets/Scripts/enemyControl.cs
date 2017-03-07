@@ -10,10 +10,13 @@ public class enemyControl : MonoBehaviour {
 	public GameObject ball;
 	public GameObject reloadTextObject;
 
+	GameObject stolenHuman;
+
 	public static bool playerExists = true;
 
 	float shootTime = 6f;
 	bool shot = false;
+	bool steal = false;
 
 	float moveForceX = 2f;
     float moveForceY = 1f;
@@ -30,6 +33,11 @@ public class enemyControl : MonoBehaviour {
 
 		if (collider.tag == "Laser") { 
 			GameObject exp = Instantiate(explosion, transform.position, Quaternion.identity);
+			if(steal){
+				stolenHuman = gameObject.transform.GetChild(0).gameObject;
+				stolenHuman.transform.parent=transform.parent;
+				steal = false;
+			}
 			Destroy(gameObject);
 			Destroy(collider.gameObject);
 			Destroy(exp, 2);
@@ -42,6 +50,11 @@ public class enemyControl : MonoBehaviour {
 			Destroy(exp, 2);
 			playerExists = false;
 		}
+		else if(collider.tag == "Human"){
+			steal = true;
+			collider.gameObject.transform.position = new Vector2(transform.position.x-0.1f,transform.position.y);
+			collider.gameObject.transform.parent = gameObject.transform;
+		}
 	}
 
 	void Update ()
@@ -49,31 +62,41 @@ public class enemyControl : MonoBehaviour {
 		Physics2D.IgnoreLayerCollision (8, 8, true);
 
 		if(playerExists){
-			float dist = Vector3.Distance(player.transform.position, transform.position);
-			//move towards player if somewhat close, but do not move to touching
-			if(dist < 4){
-				if(Mathf.Abs(player.transform.position.x-transform.position.x) > 0.5f){
-					if(player.transform.position.x < transform.position.x)
-						GetComponent<Rigidbody2D>().AddForce (Vector2.left * moveForceX);
-					else
-						GetComponent<Rigidbody2D>().AddForce (Vector2.right * moveForceX);
-				}
-				else if(Mathf.Abs(player.transform.position.y-transform.position.y) > 0.5f){
-					if(player.transform.position.y < transform.position.y)
-						GetComponent<Rigidbody2D>().AddForce (Vector2.down * moveForceY);
-					else
-						GetComponent<Rigidbody2D>().AddForce (Vector2.up * moveForceY);
-				}
-				if(shot && shootTime > 0){
-					shootTime -= Time.deltaTime;
+			if(steal){
+				if(transform.position.y < 2.5f){
+					GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0.1f);
 				}
 				else{
-					shot = false;
-					shootTime = 6f;
+					steal = false;
 				}
-				if(!shot){
-					shot = true;
-					Shoot();
+			}
+			else{
+				float dist = Vector3.Distance(player.transform.position, transform.position);
+				//move towards player if somewhat close, but do not move to touching
+				if(dist < 4){
+					if(Mathf.Abs(player.transform.position.x-transform.position.x) > 0.5f){
+						if(player.transform.position.x < transform.position.x)
+							GetComponent<Rigidbody2D>().AddForce (Vector2.left * moveForceX);
+						else
+							GetComponent<Rigidbody2D>().AddForce (Vector2.right * moveForceX);
+					}
+					else if(Mathf.Abs(player.transform.position.y-transform.position.y) > 0.5f){
+						if(player.transform.position.y < transform.position.y)
+							GetComponent<Rigidbody2D>().AddForce (Vector2.down * moveForceY);
+						else
+							GetComponent<Rigidbody2D>().AddForce (Vector2.up * moveForceY);
+					}
+					if(shot && shootTime > 0){
+						shootTime -= Time.deltaTime;
+					}
+					else{
+						shot = false;
+						shootTime = 6f;
+					}
+					if(!shot){
+						shot = true;
+						Shoot();
+					}
 				}
 			}
 
@@ -104,4 +127,5 @@ public class enemyControl : MonoBehaviour {
 
 		Destroy(shot, 2f);
 	}
+
 }

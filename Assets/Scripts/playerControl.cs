@@ -4,7 +4,6 @@ using System.Collections;
 public class playerControl : MonoBehaviour {
 
     public bool facing = true; 
-	public bool killed = false;
 	public GameObject laser;
 	float speed = 20f;
 
@@ -20,6 +19,8 @@ public class playerControl : MonoBehaviour {
 
     void Update ()
     {
+    	Physics2D.IgnoreLayerCollision (9, 9, true);
+
     	if(enemyControl.playerExists){
 	        float h = Input.GetAxis("Horizontal");
 			float w = Input.GetAxis("Vertical");
@@ -76,16 +77,5 @@ public class playerControl : MonoBehaviour {
         theScale.x *= -1;
         transform.localScale = theScale;
     }
-
-	//kill player on enemy contact
-	void OnCollisionEnter2D(Collision2D col)
-	{
-		Collider2D collider = col.collider;
-
-		if (collider.tag == "enemy") { 
-			killed = true;
-		}
-	}
-
 
 }
