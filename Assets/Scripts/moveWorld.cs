@@ -25,10 +25,10 @@ public class moveWorld : MonoBehaviour {
 
 		//on world1, move world2
 		if(playerpos >= world1pos -12.25f && playerpos <= world1pos + 12.25f){
-			if(playerpos < world1.transform.position.x && world2.transform.position.x > world1.transform.position.x)
-				world2.transform.position = new Vector2(world1.transform.position.x-25.5f, 0);
-			else if(playerpos > world1.transform.position.x && world2.transform.position.x < world1.transform.position.x)
-				world2.transform.position = new Vector2(world1.transform.position.x+25.5f, 0);
+			if(playerpos < world1pos && world2pos > world1pos)
+				world2.transform.position = new Vector2(world1pos-25.5f, 0);
+			else if(playerpos > world1pos && world2pos < world1pos)
+				world2.transform.position = new Vector2(world1pos+25.5f, 0);
 		}
 
 		//on world2, move world1

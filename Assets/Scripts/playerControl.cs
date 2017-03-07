@@ -7,33 +7,46 @@ public class playerControl : MonoBehaviour {
 	public bool killed = false;
 
     //forces for moving
-    public float moveForce = 200f;
-    public float maxSpeed = 3f;
+    float moveForce = 100f;
+    float maxSpeed = 100f;
 
     // Use this for initialization
     void Start () {
 
 	}
 
-	// Update is called once per frame
-	void Update () {
-
-	}
-
-    void FixedUpdate ()
+    void Update ()
     {
         float h = Input.GetAxis("Horizontal");
+		float w = Input.GetAxis("Vertical");
 
+		// Horizontal flying
 		if (h * GetComponent<Rigidbody2D> ().velocity.x < maxSpeed){
 			if (GetComponent<Rigidbody2D> ().velocity.y == 0)
 				GetComponent<Rigidbody2D> ().AddForce (Vector2.right * h * moveForce);
 			else
 				GetComponent<Rigidbody2D> ().velocity = new Vector2 (0, GetComponent<Rigidbody2D> ().velocity.y);
-			}
+		}
+
         if (Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) >= maxSpeed)
 			if (GetComponent<Rigidbody2D> ().velocity.y == 0)
             	GetComponent<Rigidbody2D>().velocity = new Vector2(Mathf.Sign(GetComponent<Rigidbody2D>().velocity.x) * maxSpeed, GetComponent<Rigidbody2D>().velocity.y);
 
+        // Vertical flying
+		if (w * GetComponent<Rigidbody2D> ().velocity.y < maxSpeed){
+			if (GetComponent<Rigidbody2D> ().velocity.x == 0)
+				GetComponent<Rigidbody2D> ().AddForce (Vector2.up * w * moveForce);
+			else
+				GetComponent<Rigidbody2D> ().velocity = new Vector2 (GetComponent<Rigidbody2D> ().velocity.x, 0);
+		}
+
+		// Don't go off the screen
+		if(gameObject.transform.position.y >= 2.0f)
+			gameObject.transform.position = new Vector2(gameObject.transform.position.x, 2.0f);
+		else if(gameObject.transform.position.y <= -2.0f)
+			gameObject.transform.position = new Vector2(gameObject.transform.position.x, -2.0f);
+
+        // Flip the player
         if (h > 0 && !facing) 
             Flip();
         else if (h < 0 && facing) 
