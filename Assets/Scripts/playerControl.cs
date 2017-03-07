@@ -4,7 +4,6 @@ using System.Collections;
 public class playerControl : MonoBehaviour {
 
     public bool facing = true; 
-	public Vector3 originalPosition;
 	public bool killed = false;
 
     //forces for moving
@@ -13,7 +12,7 @@ public class playerControl : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		originalPosition = gameObject.transform.position;
+
 	}
 
 	// Update is called once per frame
@@ -52,14 +51,13 @@ public class playerControl : MonoBehaviour {
         transform.localScale = theScale;
     }
 
-	//kill player on enemy contact, check if grounded 
+	//kill player on enemy contact
 	void OnCollisionEnter2D(Collision2D col)
 	{
 		Collider2D collider = col.collider;
 
 		if (collider.tag == "enemy") { 
 			killed = true;
-			gameObject.transform.position = originalPosition;
 		}
 	}
 
