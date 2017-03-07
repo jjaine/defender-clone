@@ -65,8 +65,9 @@ public class enemyControl : MonoBehaviour {
 		if(playerExists){
 			humanArray = GameObject.FindGameObjectsWithTag("Human");
 			foreach(GameObject h in humanArray){
-				if(h.transform.position.y > 2f)
+				if(h.transform.position.y > 2.4f){
 					Destroy(h);
+				}
 			}
 			if(steal){
 				if(transform.position.y < 2.5f){
@@ -74,6 +75,8 @@ public class enemyControl : MonoBehaviour {
 				}
 				else{				
 					steal = false;
+					Destroy(gameObject);
+					spawnEnemies.enemyCount--;
 				}
 			}
 			else{
