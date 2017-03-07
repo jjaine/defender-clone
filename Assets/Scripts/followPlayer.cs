@@ -13,7 +13,8 @@ public class followPlayer : MonoBehaviour {
 	}
 	
 	void Update () {
-		gameObject.transform.position = new Vector3(player.transform.position.x, 0, gameObject.transform.position.z);
+    	if(enemyControl.playerExists)
+			gameObject.transform.position = new Vector3(player.transform.position.x, 0, gameObject.transform.position.z);
 		
 	}
 }
