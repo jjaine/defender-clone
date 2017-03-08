@@ -1,3 +1,3 @@
 # defender-clone
 
-Made with Unity
+Made with Unity, pictures from Pixabay
