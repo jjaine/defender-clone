@@ -120,6 +120,23 @@ public class enemyControl : MonoBehaviour {
 						Shoot();
 					}
 				}
+				//try to get humans
+				else{
+					for(int i=0; i< humanArray.Length; i++){
+						dist = Vector3.Distance(transform.position, humanArray[i].transform.position);
+						if(dist < 4){
+							if(humanArray[i].transform.position.x < transform.position.x)
+								GetComponent<Rigidbody2D>().AddForce (Vector2.left * moveForceX);
+							else
+								GetComponent<Rigidbody2D>().AddForce (Vector2.right * moveForceX);							
+							if(humanArray[i].transform.position.y < transform.position.y)
+								GetComponent<Rigidbody2D>().AddForce (Vector2.down * moveForceY);
+							else
+								GetComponent<Rigidbody2D>().AddForce (Vector2.up * moveForceY);
+						}
+					}
+					
+				}
 			}
 
 		}
