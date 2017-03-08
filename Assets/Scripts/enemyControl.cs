@@ -39,9 +39,8 @@ public class enemyControl : MonoBehaviour {
 		if (collider.tag == "Laser") { 
 			GameObject exp = Instantiate(explosion, transform.position, Quaternion.identity);
 			if(steal){
-				stolenHuman = gameObject.transform.GetChild(0).gameObject;
 				stolenHuman.transform.parent=transform.parent;
-				stolenHuman.GetComponent<Collider>().enabled=true;
+				stolenHuman.GetComponent<Collider2D>().enabled=true;
 				steal = false;
 				humansStolen--;
 			}
@@ -59,6 +58,7 @@ public class enemyControl : MonoBehaviour {
 		}
 		else if(collider.tag == "Human"){
 			steal = true;
+			stolenHuman = collider.gameObject;
 			collider.gameObject.transform.position = new Vector2(transform.position.x-0.1f,transform.position.y);
 			collider.gameObject.transform.parent = gameObject.transform;
 			collider.enabled = false;
@@ -134,6 +134,7 @@ public class enemyControl : MonoBehaviour {
 		yield return new WaitForSeconds(3);
 		playerExists = true;
 		spawnEnemies.enemyCount=0;
+		humansStolen=0;
 		Scene scene = SceneManager.GetActiveScene();
 		SceneManager.LoadScene(scene.name);
 	}
