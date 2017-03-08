@@ -10,6 +10,7 @@ public class enemyControl : MonoBehaviour {
 	public GameObject ball;
 	public GameObject reloadTextObject;
 	public GameObject humanTextObject;
+	public GameObject scoreTextObject;
 
 	GameObject stolenHuman;
 	GameObject[] humanArray;
@@ -20,6 +21,7 @@ public class enemyControl : MonoBehaviour {
 	bool shot = false;
 	bool steal = false;
 	static int humansStolen = 0;
+	static int score = 0;
 
 	float moveForceX = 2f;
     float moveForceY = 1f;
@@ -29,7 +31,8 @@ public class enemyControl : MonoBehaviour {
 		reloadTextObject = GameObject.Find("ReloadText");
 		reloadTextObject.GetComponent<Text>().enabled = false;
 		humanTextObject = GameObject.Find("HumansText");
-		humanTextObject.GetComponent<Text>().enabled = true;	
+		humanTextObject.GetComponent<Text>().enabled = true;
+		scoreTextObject = GameObject.Find("ScoreText");	
 	}
 
 	void OnCollisionEnter2D(Collision2D col)
@@ -44,6 +47,7 @@ public class enemyControl : MonoBehaviour {
 				steal = false;
 				humansStolen--;
 			}
+			score+=10;
 			Destroy(gameObject);
 			Destroy(collider.gameObject);
 			Destroy(exp, 2);
@@ -92,6 +96,8 @@ public class enemyControl : MonoBehaviour {
 			//normal status
 			else{
 				humanTextObject.GetComponent<Text>().text = "Humans abducted: " + (5-humanArray.Length)+"/5,\nmoving: " + humansStolen +"/5";
+				scoreTextObject.GetComponent<Text>().text = "Score: " + score;
+
 				if(humanArray.Length < 1)
 					playerExists = false;
 
@@ -155,6 +161,7 @@ public class enemyControl : MonoBehaviour {
 		playerExists = true;
 		spawnEnemies.enemyCount=0;
 		humansStolen=0;
+		score=0;
 		Scene scene = SceneManager.GetActiveScene();
 		SceneManager.LoadScene(scene.name);
 	}
