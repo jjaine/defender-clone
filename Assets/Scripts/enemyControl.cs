@@ -9,6 +9,7 @@ public class enemyControl : MonoBehaviour {
 	public GameObject explosion;
 	public GameObject ball;
 	public GameObject reloadTextObject;
+	public GameObject humanTextObject;
 
 	GameObject stolenHuman;
 	GameObject[] humanArray;
@@ -18,6 +19,7 @@ public class enemyControl : MonoBehaviour {
 	float shootTime = 6f;
 	bool shot = false;
 	bool steal = false;
+	static int humansStolen = 0;
 
 	float moveForceX = 2f;
     float moveForceY = 1f;
@@ -26,6 +28,8 @@ public class enemyControl : MonoBehaviour {
 		player = GameObject.FindWithTag("Player");
 		reloadTextObject = GameObject.Find("ReloadText");
 		reloadTextObject.GetComponent<Text>().enabled = false;
+		humanTextObject = GameObject.Find("HumansText");
+		humanTextObject.GetComponent<Text>().enabled = true;	
 	}
 
 	void OnCollisionEnter2D(Collision2D col)
@@ -37,7 +41,9 @@ public class enemyControl : MonoBehaviour {
 			if(steal){
 				stolenHuman = gameObject.transform.GetChild(0).gameObject;
 				stolenHuman.transform.parent=transform.parent;
+				stolenHuman.GetComponent<Collider>().enabled=true;
 				steal = false;
+				humansStolen--;
 			}
 			Destroy(gameObject);
 			Destroy(collider.gameObject);
@@ -55,6 +61,8 @@ public class enemyControl : MonoBehaviour {
 			steal = true;
 			collider.gameObject.transform.position = new Vector2(transform.position.x-0.1f,transform.position.y);
 			collider.gameObject.transform.parent = gameObject.transform;
+			collider.enabled = false;
+			humansStolen++;
 		}
 	}
 
@@ -77,17 +85,18 @@ public class enemyControl : MonoBehaviour {
 					steal = false;
 					Destroy(gameObject);
 					spawnEnemies.enemyCount--;
+					humansStolen--;
 				}
 			}
 			else{
-				Debug.Log(humanArray.Length);
+				humanTextObject.GetComponent<Text>().text = "Humans abducted: " + (5-humanArray.Length)+"/5,\nmoving: " + humansStolen +"/5";
 				if(humanArray.Length < 1)
 					playerExists = false;
 
 				float dist = Vector3.Distance(player.transform.position, transform.position);
 				//move towards player if somewhat close, but do not move to touching
 				if(dist < 4){
-					if(Mathf.Abs(player.transform.position.x-transform.position.x) > 0.5f){
+					if(Mathf.Abs(player.transform.position.x-transform.position.x) > 0.8f){
 						if(player.transform.position.x < transform.position.x)
 							GetComponent<Rigidbody2D>().AddForce (Vector2.left * moveForceX);
 						else
@@ -120,6 +129,7 @@ public class enemyControl : MonoBehaviour {
 	}
 
 	IEnumerator Reload(){
+		humanTextObject.GetComponent<Text>().enabled = false;
 		reloadTextObject.GetComponent<Text>().enabled = true;
 		yield return new WaitForSeconds(3);
 		playerExists = true;
