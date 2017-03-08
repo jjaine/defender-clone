@@ -13,7 +13,7 @@ public class spawnEnemies : MonoBehaviour {
 	public static int enemyCount=0;
 	public static int humanCount=5;
 
-	//init
+	//init, spawn humans
 	void Start () {
 		world1 = GameObject.FindWithTag("World1");
 		world2 = GameObject.FindWithTag("World2");
@@ -34,11 +34,11 @@ public class spawnEnemies : MonoBehaviour {
 
 	}
 	
-	// Update is called once per frame
 	void Update () {
 		Vector3 world1pos = world1.transform.position;
 		Vector3 world2pos = world2.transform.position;
 
+		//have always 10 enemies
 		if(enemyCount < 10){
 			if(Random.Range(0,2)==0){
 				float x = Random.Range(world1pos.x-12f, world1pos.x+12f);

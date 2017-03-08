@@ -77,6 +77,7 @@ public class enemyControl : MonoBehaviour {
 					Destroy(h);
 				}
 			}
+			//if human stolen
 			if(steal){
 				if(transform.position.y < 2.5f){
 					GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0.1f);
@@ -88,6 +89,7 @@ public class enemyControl : MonoBehaviour {
 					humansStolen--;
 				}
 			}
+			//normal status
 			else{
 				humanTextObject.GetComponent<Text>().text = "Humans abducted: " + (5-humanArray.Length)+"/5,\nmoving: " + humansStolen +"/5";
 				if(humanArray.Length < 1)
@@ -145,6 +147,7 @@ public class enemyControl : MonoBehaviour {
 		}
 	}
 
+	//reload level
 	IEnumerator Reload(){
 		humanTextObject.GetComponent<Text>().enabled = false;
 		reloadTextObject.GetComponent<Text>().enabled = true;
@@ -156,6 +159,7 @@ public class enemyControl : MonoBehaviour {
 		SceneManager.LoadScene(scene.name);
 	}
 
+	//enemies shoot player
 	void Shoot(){
 		GameObject shot = Instantiate(ball, transform.position, Quaternion.identity);
 		int dir = 1;
